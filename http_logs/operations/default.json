@@ -197,7 +197,7 @@
     },
     {
       "name": "scroll",
-      "operation-type": "search",
+      "operation-type": "scroll-search",
       "index": "logs-*",
       "pages": 25,
       "results-per-page": 1000,
