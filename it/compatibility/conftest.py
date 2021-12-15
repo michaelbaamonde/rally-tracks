@@ -78,6 +78,15 @@ def test_cluster():
 def track_path():
     return PurePath(__file__).parents[2]
 
+@pytest.fixture(scope="module")
+def track_revision(pytestconfig):
+    provided_revision = pytestconfig.getoption("revision")
+    if provided_revision is not None:
+        return provided_revision
+    else:
+        proc = subprocess.run(shlex.split("git rev-parse HEAD"), text=True, capture_output=True)
+        return proc.stdout
+
 
 def list_tracks():
     cmd = "esrally list tracks --config=rally-tracks-compatibility.ini"
@@ -111,6 +120,7 @@ def track_challenge_pairs(tracks, all_tracks):
 
 def pytest_addoption(parser):
     parser.addoption("--track", action="append", default=[], help="Track to test")
+    parser.addoption("--revision", action="store", default=None, help="Track revision to test")
 
 
 def pytest_generate_tests(metafunc):
@@ -119,3 +129,7 @@ def pytest_generate_tests(metafunc):
         tracks = metafunc.config.getoption('track') or [track for (track, _) in all_tracks]
 
         metafunc.parametrize("track,challenge", track_challenge_pairs(tracks, all_tracks))
+
+    # if "track_revision" in metafunc.fixturenames:
+    #     revision = metafunc.config.getoption('revision')
+    #     metafunc.parametrize("track_revision", revision)

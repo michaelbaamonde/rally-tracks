@@ -21,7 +21,8 @@ import subprocess
 import pytest
 
 
-def test_track_challenge(track_path, track, challenge):
-    cmd = (f'esrally race --track={track} --challenge={challenge} --pipeline=benchmark-only --configuration-name=tracks-compatibility --track-repository={track_path} '
+def test_track_challenge(track_path, track_revision, track, challenge):
+    cmd = (f'esrally race --track={track} --challenge={challenge} --pipeline=benchmark-only '
+           f'--configuration-name=tracks-compatibility --track-repository={track_path} --track-revision={track_revision} '
            f'--target-hosts="127.0.0.1:19200" --test-mode --on-error=abort --kill-running-processes ')
     assert subprocess.run(shlex.split(cmd)).returncode == 0
