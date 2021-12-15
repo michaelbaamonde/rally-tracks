@@ -79,12 +79,12 @@ def track_path():
     return PurePath(__file__).parents[2]
 
 @pytest.fixture(scope="module")
-def track_revision(pytestconfig):
+def track_revision(pytestconfig, track_path):
     provided_revision = pytestconfig.getoption("revision")
     if provided_revision is not None:
         return provided_revision
     else:
-        proc = subprocess.run(shlex.split("git rev-parse HEAD"), text=True, capture_output=True)
+        proc = subprocess.run(shlex.split(f"git -C {track_path} rev-parse HEAD"), text=True, capture_output=True)
         return proc.stdout
 
 
@@ -129,7 +129,3 @@ def pytest_generate_tests(metafunc):
         tracks = metafunc.config.getoption('track') or [track for (track, _) in all_tracks]
 
         metafunc.parametrize("track,challenge", track_challenge_pairs(tracks, all_tracks))
-
-    # if "track_revision" in metafunc.fixturenames:
-    #     revision = metafunc.config.getoption('revision')
-    #     metafunc.parametrize("track_revision", revision)
