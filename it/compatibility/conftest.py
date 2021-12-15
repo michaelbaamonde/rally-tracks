@@ -22,6 +22,7 @@ import uuid
 
 import pytest
 
+from pathlib import PurePath
 from esrally import client
 
 class ESCluster:
@@ -73,9 +74,13 @@ def test_cluster():
     yield cluster
     cluster.stop()
 
+@pytest.fixture(scope="module")
+def track_path():
+    return PurePath(__file__).parents[2]
+
 
 def list_tracks():
-    cmd = "esrally list tracks"
+    cmd = "esrally list tracks --config=rally-tracks-compatibility.ini"
     proc = subprocess.run(shlex.split(cmd), text=True, capture_output=True)
     return proc.stdout
 
