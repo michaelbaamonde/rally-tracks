@@ -18,6 +18,12 @@
 import pytest
 
 class TestTrackRepository:
+    skip_tracks = ["elastic/logs", "elastic/security"]
+    skip_challenges = [{"sql": "sql"},]
+
     def test_track_challenge(self, es_cluster, rally, track, challenge, rally_options):
-        ret = rally.race(track=track, challenge=challenge, **rally_options)
-        assert ret == 0
+        if track not in self.skip_tracks and {track: challenge} not in self.skip:
+            ret = rally.race(track=track, challenge=challenge, **rally_options)
+            assert ret == 0
+        else:
+            pytest.skip(msg=f"{track}-{challenge} included in skip list")
