@@ -18,6 +18,6 @@
 import pytest
 
 class TestTrackRepository:
-    def test_track_challenge(self, rally_config, es_cluster, race, track, challenge, race_kwargs):
-        ret = race(track, challenge, **race_kwargs)
+    def test_track_challenge(self, es_cluster, rally, track, challenge, rally_options):
+        ret = rally.race(track=track, challenge=challenge, **rally_options)
         assert ret == 0
