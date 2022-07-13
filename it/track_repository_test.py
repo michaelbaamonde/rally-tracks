@@ -22,7 +22,7 @@ class TestTrackRepository:
     skip_challenges = [{"sql": "sql"},]
 
     def test_track_challenge(self, es_cluster, rally, track, challenge, rally_options):
-        if track not in self.skip_tracks and {track: challenge} not in self.skip:
+        if track not in self.skip_tracks and {track: challenge} not in self.skip_challenges:
             ret = rally.race(track=track, challenge=challenge, **rally_options)
             assert ret == 0
         else:

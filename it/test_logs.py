@@ -15,6 +15,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import pytest
+
 BASE_PARAMS = {
     "start_date": "2021-01-01T00-00-00Z",
     "end_date": "2021-01-01T00-00-02Z",
@@ -32,8 +34,14 @@ def params(updates=None):
     if updates is None:
         return base
     else:
-        return base.update(updates)
+        return {**base, **updates}
 
+@pytest.mark.parametrize(
+    "es_cluster",
+    [{"distribution_version": "7.17.1"}],
+    ids=["7.17.1"],
+    indirect=True
+)
 class TestLogs:
     def test_logs_default(self, es_cluster, rally):
         ret = rally.race(
@@ -61,7 +69,7 @@ class TestLogs:
         assert ret == 0
 
     def test_logs_querying(self, rally, es_cluster):
-        custom = {'query_warmup_time_period': '60', 'query_time_period': '120'}
+        custom = {'query_warmup_time_period': '30', 'query_time_period': '60'}
         ret = rally.race(
             track="elastic/logs",
             challenge="logging-querying",
@@ -72,8 +80,8 @@ class TestLogs:
 
     def test_logs_indexing_querying_unthrottled(self, es_cluster, rally):
         custom = {
-            'query_warmup_time_period': '60',
-            'query_time_period': '120'
+            'query_warmup_time_period': '30',
+            'query_time_period': '60'
         }
         ret = rally.race(
             track="elastic/logs",
@@ -94,8 +102,8 @@ class TestLogs:
 
     def test_logs_indexing_querying_throttled(self, es_cluster, rally):
         custom = {
-            'query_warmup_time_period': '60',
-            'query_time_period': '120',
+            'query_warmup_time_period': '30',
+            'query_time_period': '60',
             'throttle_indexing': 'true'
         }
         ret = rally.race(
@@ -110,8 +118,8 @@ class TestLogs:
         custom = {
             'bulk_start_date': '2020-09-30T00-00-00Z',
             'bulk_end_date': '2020-09-30T00-00-02Z',
-            'query_warmup_time_period': '60',
-            'query_time_period': '120'
+            'query_warmup_time_period': '30',
+            'query_time_period': '60'
         }
         ret = rally.race(
             track="elastic/logs",
