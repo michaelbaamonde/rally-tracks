@@ -14,9 +14,9 @@
           org-list:
             - elastic
           allow-whitelist-orgs-as-admins: true
-          trigger-phrase: '.*run\W+rally/precommit.*'
+          trigger-phrase: '.*run\W+rally-tracks/precommit.*'
           github-hooks: true
-          status-context: "rally/precommit"
+          status-context: "rally-tracks/precommit"
           cancel-builds-on-update: true
           black-list-labels:
             - '>test-mute'
