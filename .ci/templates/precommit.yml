@@ -1,7 +1,7 @@
 ---
 
 - job:
-    name: "elastic+rally+{jobname}+{branch}-precommit"
+    name: "elastic+rally-tracks+{jobname}+{branch}-precommit"
     display-name: "elastic / rally-tracks # {branch} - {jobname}+precommit"
     description: "Precommit (checkstyle + unit) tests for elastic/rally-tracks"
     concurrent: true

@@ -1,8 +1,8 @@
 ---
 
 - job:
-    name: "elastic+rally+pull-request+precommit"
-    display-name: "elastic / rally # pull-request+precommit"
+    name: "elastic+rally-tracks+pull-request+precommit"
+    display-name: "elastic / rally-tracks # pull-request+precommit"
     description: "Precommit (checkstyle + unit) tests for rally pull requests"
     scm:
       - git:
