@@ -59,6 +59,7 @@ function test {
 
 function it {
   build
+  echo "RALLY_HOME: ${RALLY_HOME}"
   make prereq
   make install
   make it
