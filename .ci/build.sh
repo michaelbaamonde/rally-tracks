@@ -61,8 +61,6 @@ function it {
   build
   make prereq
   make install
-  echo "RALLY_HOME: ${RALLY_HOME}"
-  mkdir "${RALLY_HOME}/.rally"
   make it
 }
 
