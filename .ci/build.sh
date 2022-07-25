@@ -50,8 +50,8 @@ function build {
 
 }
 
-function test {
-#  build
+function precommit {
+  build
   make prereq
   make install
   make test
