@@ -27,7 +27,7 @@ jobs:
         run: python3 -m pip install "pytest==6.2.5"
 
       - name: Install pytest-rally
-        run: python3 -m pip install "https://github.com/elastic/pytest-rally/archive/master.tar.gz"
+        run: python3 -m pip install "git+https://github.com/elastic/pytest-rally.git@git-compatibility"
 
       - name: Run integration tests
         run: pytest it/ --log-cli-level=INFO
