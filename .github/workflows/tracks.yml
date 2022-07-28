@@ -29,5 +29,5 @@ jobs:
       - name: Install pytest-rally
         run: python3 -m pip install "git+https://github.com/elastic/pytest-rally.git@git-compatibility"
 
-      - name: Run integration tests
-        run: pytest it/ --log-cli-level=INFO --distribution-version=8.3.2
+      - name: Run elastic/logs integration tests
+        run: pytest it/test_logs.py --log-cli-level=INFO --distribution-version=8.3.2
