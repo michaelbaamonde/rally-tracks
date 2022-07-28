@@ -60,8 +60,8 @@ check-venv:
 	fi
 
 install: venv-create
-	. $(VENV_ACTIVATE_FILE); $(PIP_WRAPPER) install --upgrade pip==$(PIP_VERSION) setuptools==$(SETUPTOOLS_VERSION) wheel==$(WHEEL_VERSION) pytest==6.2.5 geneve==0.0.3 pytest-asyncio==0.18.1
-	. $(VENV_ACTIVATE_FILE); $(PIP_WRAPPER) install --upgrade git+ssh://git@github.com/elastic/rally.git
+	. $(VENV_ACTIVATE_FILE); $(PIP_WRAPPER) install --upgrade pip==$(PIP_VERSION) setuptools==$(SETUPTOOLS_VERSION) wheel==$(WHEEL_VERSION) pytest==6.2.5 pytest-asyncio==0.18.1
+	. $(VENV_ACTIVATE_FILE); $(PIP_WRAPPER) install --upgrade "https://github.com/elastic/rally/archive/master.tar.gz"
 	. $(VENV_ACTIVATE_FILE); $(PIP_WRAPPER) install --upgrade git+ssh://git@github.com/elastic/pytest-rally.git
 
 test: check-venv
