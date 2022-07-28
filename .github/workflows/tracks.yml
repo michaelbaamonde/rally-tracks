@@ -2,7 +2,7 @@ name: Tracks
 
 on:
   push:
-    branches: ["master"]
+    branches: ["pytest-rally-gh-actions"]
   pull_request:
     branches: ["*"]
 
