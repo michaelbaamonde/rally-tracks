@@ -35,7 +35,7 @@ jobs:
         run: esrally list tracks --track-path=${{ matrix.track }}
 
   it:
-    name: ${{ matrix.name }} on stack ${{ matrix.stack-version }}
+    name: integration tests
     runs-on: ubuntu-latest
 
     steps:
