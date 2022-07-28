@@ -1,38 +1,10 @@
-name: Tracks
+name: Integration tests
 
 on:
   push:
     branches: ["pytest-rally-gh-actions"]
   pull_request:
     branches: ["*"]
-
-jobs:
-  list-track:
-    name: List track ${{ matrix.track }}
-    runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        track:
-          - elastic/endpoint
-          - elastic/logs
-          - elastic/security
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.8"
-
-      - name: Install dependencies
-        run: python3 -m pip install "https://github.com/elastic/rally/archive/master.tar.gz"
-
-      - name: List track
-        run: esrally list tracks --track-path=${{ matrix.track }}
 
   it:
     name: integration tests
@@ -47,12 +19,15 @@ jobs:
         with:
           python-version: "3.8"
 
-      - name: Install dependencies
-        run: |
-          python3 -m pip install "https://github.com/elastic/rally/archive/master.tar.gz" \
-          python3 -m pip install "pytest==6.2.5" \
-          python3 -m pip install "https://github.com/elastic/pytest-rally/archive/master.tar.gz"
+      - name: Install Rally
+        run: python3 -m pip install
+        "https://github.com/elastic/rally/archive/master.tar.gz"
+
+      - name: Install pytest
+        run: python3 -m pip install "pytest==6.2.5"
+
+      - name: Install pytest-rally
+        run: python3 -m pip install "https://github.com/elastic/pytest-rally/archive/master.tar.gz"
 
       - name: Run integration tests
-        run: |
-          pytest it/ --log-cli-level=INFO
+        run: pytest it/ --log-cli-level=INFO
