@@ -20,8 +20,7 @@ on:
           python-version: "3.8"
 
       - name: Install Rally
-        run: python3 -m pip install
-        "https://github.com/elastic/rally/archive/master.tar.gz"
+        run: python3 -m pip install "https://github.com/elastic/rally/archive/master.tar.gz"
 
       - name: Install pytest
         run: python3 -m pip install "pytest==6.2.5"
