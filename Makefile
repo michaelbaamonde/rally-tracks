@@ -60,14 +60,23 @@ check-venv:
 	fi
 
 install: venv-create
-	. $(VENV_ACTIVATE_FILE); $(PIP_WRAPPER) install --upgrade pip==$(PIP_VERSION) setuptools==$(SETUPTOOLS_VERSION) wheel==$(WHEEL_VERSION) pytest==6.2.5 pytest-asyncio==0.18.1
-	. $(VENV_ACTIVATE_FILE); $(PIP_WRAPPER) install --upgrade "https://github.com/elastic/rally/archive/master.tar.gz"
-	. $(VENV_ACTIVATE_FILE); $(PIP_WRAPPER) install --upgrade git+ssh://git@github.com/elastic/pytest-rally.git
+	. $(VENV_ACTIVATE_FILE); pip install --upgrade pip
+	# install pytest for tests
+	. $(VENV_ACTIVATE_FILE); pip3 install pytest==6.2.5 pytest-benchmark==3.2.2
+	# install dependencies for tests
+	. $(VENV_ACTIVATE_FILE); pip3 install geneve==0.0.3 pytest-asyncio==0.18.1
+	# install (latest) Rally for integration tests
+	. $(VENV_ACTIVATE_FILE); pip3 install git+ssh://git@github.com/elastic/rally.git --use-feature=2020-resolver
+	# install pytest-rally for integration tests
+	. $(VENV_ACTIVATE_FILE); pip3 install git+ssh://git@github.com/elastic/pytest-rally.git --use-feature=2020-resolver
 
 test: check-venv
-	. $(VENV_ACTIVATE_FILE); pytest --ignore=it/
+	. $(VENV_ACTIVATE_FILE); pytest
 
 it: check-venv
 	. $(VENV_ACTIVATE_FILE); pytest it/
+
+clean:
+	rm -rf .pytest_cache
 
 .PHONY: test it prereq venv-create check-env
