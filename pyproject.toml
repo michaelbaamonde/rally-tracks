@@ -11,13 +11,34 @@ readme = "README.md"
 version = "0.0.1"
 requires-python = ">=3.8"
 
+[tool.hatch.envs.default]
 dependencies = [
+    "esrally @ git+https://github.com/elastic/rally.git@master",
+]
+
+[tool.hatch.envs.test]
+extra-dependencies = [
     "pytest==6.2.5",
     "pytest-asyncio==0.18.1",
-    "tox==3.14.0",
-    "esrally @ git+https://github.com/elastic/rally.git@master",
-    "pytest-rally @ git+https://github.com/elastic/pytest-rally@main",
 ]
+
+[tool.hatch.envs.unit]
+template = "test"
+extra-dependencies = [
+    "geneve==0.0.3"
+]
+
+[tool.hatch.envs.unit.scripts]
+test = "pytest"
+
+[tool.hatch.envs.it]
+template = "test"
+extra-dependencies = [
+    "pytest-rally @ git+ssh://git@github.com/elastic/pytest-rally.git#egg=pytest-rally",
+]
+
+[tool.hatch.envs.it.scripts]
+test = "pytest it --collect-only"
 
 [tool.pytest.ini_options]
 # set to true for more verbose output of tests
