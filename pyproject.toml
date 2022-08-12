@@ -11,14 +11,13 @@ readme = "README.md"
 version = "0.0.1"
 requires-python = ">=3.8"
 
-# [project.optional-dependencies]
-# develop = [
-#     "pytest==6.2.5",
-#     "pytest-asyncio==0.18.1",
-#     "tox==3.14.0",
-#     "esrally @ git+https://github.com/elastic/rally.git",
-#     "pytest-rally @ https://github.com/elastic/pytest-rally.git",
-# ]
+dependencies = [
+    "pytest==6.2.5",
+    "pytest-asyncio==0.18.1",
+    "tox==3.14.0",
+    "esrally @ git+https://github.com/elastic/rally.git@master",
+    "pytest-rally @ git+https://github.com/elastic/pytest-rally@main",
+]
 
 [tool.pytest.ini_options]
 # set to true for more verbose output of tests

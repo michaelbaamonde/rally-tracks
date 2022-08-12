@@ -21,6 +21,10 @@ PYENV_REGEX = .pyenv/shims
 PY_BIN = python3
 # https://github.com/pypa/pip/issues/5599
 PIP_WRAPPER = $(PY_BIN) -m pip
+export HATCH_VERSION = $(shell jq -r '.prerequisite_versions.HATCH' .ci/variables.json)
+export HATCHLING_VERSION = $(shell jq -r '.prerequisite_versions.HATCHLING' .ci/variables.json)
+export PIP_VERSION = $(shell jq -r '.prerequisite_versions.PIP' .ci/variables.json)
+export WHEEL_VERSION = $(shell jq -r '.prerequisite_versions.WHEEL' .ci/variables.json)
 VIRTUAL_ENV ?= .venv
 VENV_ACTIVATE_FILE = $(VIRTUAL_ENV)/bin/activate
 VENV_ACTIVATE = . $(VENV_ACTIVATE_FILE)
@@ -49,8 +53,9 @@ check-venv:
 	fi
 
 install: venv-create
-	. $(VENV_ACTIVATE_FILE); pip install --upgrade pip
-	. $(VENV_ACTIVATE_FILE); pip install tox==3.14.0
+	. $(VENV_ACTIVATE_FILE); $(PIP_WRAPPER) install --upgrade hatch==$(HATCH_VERSION) hatchling==$(HATCHLING_VERSION) pip==$(PIP_VERSION) wheel==$(WHEEL_VERSION)
+	. $(VENV_ACTIVATE_FILE); $(PIP_WRAPPER) install -e .[develop]
+#	. $(VENV_ACTIVATE_FILE); pip install tox==3.14.0
 	# install pytest for tests
 	# . $(VENV_ACTIVATE_FILE); pip3 install pytest==6.2.5 pytest-benchmark==3.2.2 pytest-asyncio==0.18.1
 	# # install (latest) Rally for integration tests
