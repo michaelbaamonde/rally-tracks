@@ -50,12 +50,13 @@ check-venv:
 
 install: venv-create
 	. $(VENV_ACTIVATE_FILE); pip install --upgrade pip
+	. $(VENV_ACTIVATE_FILE); pip install tox==3.14.0
 	# install pytest for tests
-	. $(VENV_ACTIVATE_FILE); pip3 install pytest==6.2.5 pytest-benchmark==3.2.2 pytest-asyncio==0.18.1
-	# install (latest) Rally for integration tests
-	. $(VENV_ACTIVATE_FILE); pip3 install git+https://github.com/elastic/rally.git
-	# install pytest-rally for integration tests
-	. $(VENV_ACTIVATE_FILE); pip3 install git+https://github.com/elastic/pytest-rally.git
+	# . $(VENV_ACTIVATE_FILE); pip3 install pytest==6.2.5 pytest-benchmark==3.2.2 pytest-asyncio==0.18.1
+	# # install (latest) Rally for integration tests
+	# . $(VENV_ACTIVATE_FILE); pip3 install git+https://github.com/elastic/rally.git
+	# # install pytest-rally for integration tests
+	# . $(VENV_ACTIVATE_FILE); pip3 install git+https://github.com/elastic/pytest-rally.git
 
 test: check-venv
 	. $(VENV_ACTIVATE_FILE); pytest

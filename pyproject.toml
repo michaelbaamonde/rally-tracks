@@ -1,0 +1,30 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[project]
+name = "rally-tracks"
+readme = "README.md"
+version = "0.0.1"
+requires-python = ">=3.8"
+
+# [project.optional-dependencies]
+# develop = [
+#     "pytest==6.2.5",
+#     "pytest-asyncio==0.18.1",
+#     "tox==3.14.0",
+#     "esrally @ git+https://github.com/elastic/rally.git",
+#     "pytest-rally @ https://github.com/elastic/pytest-rally.git",
+# ]
+
+[tool.pytest.ini_options]
+# set to true for more verbose output of tests
+log_cli = false
+log_level = "INFO"
+addopts = "--verbose --color=yes --ignore=it"
+junit_family = "xunit2"
+junit_logging = "all"
+asyncio_mode = "strict"
