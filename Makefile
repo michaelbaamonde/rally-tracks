@@ -54,22 +54,22 @@ check-venv:
 
 install: venv-create
 	. $(VENV_ACTIVATE_FILE); $(PIP_WRAPPER) install --upgrade hatch==$(HATCH_VERSION) hatchling==$(HATCHLING_VERSION) pip==$(PIP_VERSION) wheel==$(WHEEL_VERSION)
-	. $(VENV_ACTIVATE_FILE); $(PIP_WRAPPER) install -e .[develop]
-#	. $(VENV_ACTIVATE_FILE); pip install tox==3.14.0
-	# install pytest for tests
-	# . $(VENV_ACTIVATE_FILE); pip3 install pytest==6.2.5 pytest-benchmark==3.2.2 pytest-asyncio==0.18.1
-	# # install (latest) Rally for integration tests
-	# . $(VENV_ACTIVATE_FILE); pip3 install git+https://github.com/elastic/rally.git
-	# # install pytest-rally for integration tests
-	# . $(VENV_ACTIVATE_FILE); pip3 install git+https://github.com/elastic/pytest-rally.git
+	. $(VENV_ACTIVATE_FILE); $(PIP_WRAPPER) install -e .
 
 test: check-venv
-	. $(VENV_ACTIVATE_FILE); pytest
+	. $(VENV_ACTIVATE_FILE); hatch -v -e unit run test
 
 it: check-venv
-	. $(VENV_ACTIVATE_FILE); pytest it/
+	. $(VENV_ACTIVATE_FILE); hatch -v -e it run test
+
+shell-test: check-venv
+	. $(VENV_ACTIVATE_FILE); hatch -v -e unit shell
+
+shell-it: check-venv
+	. $(VENV_ACTIVATE_FILE); hatch -v -e it shell
 
 clean:
 	rm -rf .pytest_cache
+	. $(VENV_ACTIVATE_FILE); hatch -v clean
 
-.PHONY: test it prereq venv-create check-env
+.PHONY: test it prereq venv-create check-env install shell-test shell-it
