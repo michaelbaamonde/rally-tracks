@@ -21,6 +21,9 @@ PYENV_REGEX = .pyenv/shims
 PY_BIN = python3
 # https://github.com/pypa/pip/issues/5599
 PIP_WRAPPER = $(PY_BIN) -m pip
+export PY38 = $(shell jq -r '.python_versions.PY38' .ci/variables.json)
+export PY39 = $(shell jq -r '.python_versions.PY39' .ci/variables.json)
+export PY310 = $(shell jq -r '.python_versions.PY310' .ci/variables.json)
 export HATCH_VERSION = $(shell jq -r '.prerequisite_versions.HATCH' .ci/variables.json)
 export HATCHLING_VERSION = $(shell jq -r '.prerequisite_versions.HATCHLING' .ci/variables.json)
 export PIP_VERSION = $(shell jq -r '.prerequisite_versions.PIP' .ci/variables.json)
@@ -34,8 +37,10 @@ PYENV_PREREQ_HELP = "\033[0;31mIMPORTANT\033[0m: please type \033[0;31mpyenv ini
 VE_MISSING_HELP = "\033[0;31mIMPORTANT\033[0m: Couldn't find $(PWD)/$(VIRTUAL_ENV); have you executed make venv-create?\033[0m\n"
 
 prereq:
-	pyenv install --skip-existing 3.8.13
-	pyenv local 3.8.13
+	pyenv install --skip-existing $(PY38)
+	pyenv install --skip-existing $(PY39)
+	pyenv install --skip-existing $(PY310)
+	pyenv local $(PY38)
 
 venv-create:
 	@if [[ ! -x $$(command -v pyenv) ]]; then \
@@ -54,7 +59,7 @@ check-venv:
 
 install: venv-create
 	. $(VENV_ACTIVATE_FILE); $(PIP_WRAPPER) install --upgrade hatch==$(HATCH_VERSION) hatchling==$(HATCHLING_VERSION) pip==$(PIP_VERSION) wheel==$(WHEEL_VERSION)
-	. $(VENV_ACTIVATE_FILE); $(PIP_WRAPPER) install -e .
+#	. $(VENV_ACTIVATE_FILE); $(PIP_WRAPPER) install -e .
 
 test: check-venv
 	. $(VENV_ACTIVATE_FILE); hatch -v -e unit run test
