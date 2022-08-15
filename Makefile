@@ -59,13 +59,13 @@ install: venv-create
 test: check-venv
 	. $(VENV_ACTIVATE_FILE); hatch -v -e unit run test
 
+test-venv: check-venv
+	. $(VENV_ACTIVATE_FILE); hatch -v -e unit shell
+
 it: check-venv
 	. $(VENV_ACTIVATE_FILE); hatch -v -e it run test
 
-shell-test: check-venv
-	. $(VENV_ACTIVATE_FILE); hatch -v -e unit shell
-
-shell-it: check-venv
+it-venv: check-venv
 	. $(VENV_ACTIVATE_FILE); hatch -v -e it shell
 
 sdist: check-venv
@@ -74,4 +74,4 @@ clean:
 	rm -rf .pytest_cache
 	. $(VENV_ACTIVATE_FILE); hatch -v clean
 
-.PHONY: test it prereq venv-create check-env install shell-test shell-it
+.PHONY: test it prereq venv-create check-env install test-venv it-venv
