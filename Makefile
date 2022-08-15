@@ -68,6 +68,8 @@ shell-test: check-venv
 shell-it: check-venv
 	. $(VENV_ACTIVATE_FILE); hatch -v -e it shell
 
+sdist: check-venv
+	. $(VENV_ACTIVATE_FILE); hatch -v build -t sdist -c
 clean:
 	rm -rf .pytest_cache
 	. $(VENV_ACTIVATE_FILE); hatch -v clean

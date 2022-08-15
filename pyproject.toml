@@ -1,16 +1,24 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [tool.hatch.metadata]
 allow-direct-references = true
 
+[tool.hatch.version]
+source = "vcs"
+
 [project]
 name = "rally-tracks"
 readme = "README.md"
-# TODO: just set to the git revision?
-version = "0.0.1"
+dynamic = ["version"]
 requires-python = ">=3.8"
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+  "/.github",
+  "/.ci",
+]
 
 [tool.hatch.envs.test]
 dependencies = [
