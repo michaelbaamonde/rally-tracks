@@ -1,9 +1,9 @@
 ---
 
 - job:
-    name: "elastic+rally-tracks+{jobname}+{branch}-it"
-    display-name: "elastic / rally-tracks # {branch} - {jobname}+it"
-    description: "Integration tests for elastic/rally-tracks "
+    name: "elastic+rally-tracks+{jobname}+{branch}-it-{test_type}"
+    display-name: "elastic / rally-tracks # {branch} - {jobname}+it-{test_type}"
+    description: "Integration tests for elastic/rally-tracks ({test_type tests})"
     concurrent: true
     scm:
       - git:
@@ -12,5 +12,5 @@
       - shell: |
           #!/usr/local/bin/runbld
           set -o errexit
-          bash .ci/build.sh it
+          bash .ci/build.sh it-{test_type}
           bash .ci/build.sh archive
