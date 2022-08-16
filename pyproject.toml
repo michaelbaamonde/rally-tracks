@@ -27,8 +27,8 @@ dependencies = [
 
 [tool.hatch.envs.unit]
 extra-dependencies = [
-    "geneve==0.0.3"
-]
+    "geneve==0.0.3",
+    "elastic-package-assets @ git+https://github.com/elastic/package-assets.git@main" ]
 
 [tool.hatch.envs.unit.scripts]
 test = "pytest"
