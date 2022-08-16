@@ -16,7 +16,7 @@
           allow-whitelist-orgs-as-admins: true
           trigger-phrase: '.*run\W+rally-tracks/it.*'
           github-hooks: true
-          status-context: "rally-tracks/it"
+          status-context: "rally-tracks/it-{test_type}"
           cancel-builds-on-update: true
           black-list-labels:
             - '>test-mute'
