@@ -1,0 +1,5 @@
+---
+
+jjbb-template: pull-request-it.yml
+vars:
+  - test_type: "manual"
