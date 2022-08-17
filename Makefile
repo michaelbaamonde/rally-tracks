@@ -21,13 +21,11 @@ PYENV_REGEX = .pyenv/shims
 PY_BIN = python3
 # https://github.com/pypa/pip/issues/5599
 PIP_WRAPPER = $(PY_BIN) -m pip
-export PY38 = $(shell jq -r '.python_versions.PY38' .ci/variables.json)
-export PY39 = $(shell jq -r '.python_versions.PY39' .ci/variables.json)
-export PY310 = $(shell jq -r '.python_versions.PY310' .ci/variables.json)
-export HATCH_VERSION = $(shell jq -r '.prerequisite_versions.HATCH' .ci/variables.json)
-export HATCHLING_VERSION = $(shell jq -r '.prerequisite_versions.HATCHLING' .ci/variables.json)
-export PIP_VERSION = $(shell jq -r '.prerequisite_versions.PIP' .ci/variables.json)
-export WHEEL_VERSION = $(shell jq -r '.prerequisite_versions.WHEEL' .ci/variables.json)
+export PY38 = "3.8.13"
+export HATCH_VERSION = "1.3.1"
+export HATCHLING_VERSION = "1.6.0"
+export PIP_VERSION = "22.2"
+export WHEEL_VERSION = "0.37.1"
 VIRTUAL_ENV ?= .venv
 VENV_ACTIVATE_FILE = $(VIRTUAL_ENV)/bin/activate
 VENV_ACTIVATE = . $(VENV_ACTIVATE_FILE)
@@ -38,8 +36,6 @@ VE_MISSING_HELP = "\033[0;31mIMPORTANT\033[0m: Couldn't find $(PWD)/$(VIRTUAL_EN
 
 prereq:
 	pyenv install --skip-existing $(PY38)
-	pyenv install --skip-existing $(PY39)
-	pyenv install --skip-existing $(PY310)
 	pyenv local $(PY38)
 
 venv-create:
