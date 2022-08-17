@@ -2,4 +2,4 @@
 
 jjbb-template: periodic.yml
 vars:
-  - branch: ci-jobs
+  - branch: pytest-rally-with-makefile
