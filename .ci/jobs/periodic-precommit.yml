@@ -3,4 +3,4 @@
 jjbb-template: precommit.yml
 vars:
   - jobname: periodic
-  - branch: pytest-rally-with-makefile
+  - branch: master

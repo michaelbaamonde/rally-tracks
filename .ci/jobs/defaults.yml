@@ -8,9 +8,9 @@
 ##### JOB DEFAULTS
 
 - job:
-    vault: []
-      # url: "https://secrets.elastic.co:8200"
-      # role_name: "elasticsearch-ci"
+    vault:
+      url: "https://secrets.elastic.co:8200"
+      role_name: "elasticsearch-ci"
     node: "rally"
     concurrent: true
     logrotate:
@@ -20,7 +20,7 @@
     parameters:
       - string:
           name: branch_specifier
-          default: "refs/heads/pytest-rally-with-makefile"
+          default: "refs/heads/master"
           description: "the Git branch specifier to build (&lt;branchName&gt;, &lt;tagName&gt;, &lt;commitId&gt;, etc.)\n"
     scm:
       - git:
@@ -30,7 +30,7 @@
           reference-repo: "/var/lib/jenkins/.git-references/rally-tracks.git"
           branches:
             - "${branch_specifier}"
-          url: "https://github.com/michaelbaamonde/rally-tracks.git"
+          url: "https://github.com/elastic/rally-tracks.git"
           basedir: ""
           wipe-workspace: true
     triggers: []
@@ -43,7 +43,7 @@
       - timestamps
     properties:
       - github:
-          url: https://github.com/michaelbaamonde/rally-tracks/
+          url: https://github.com/elastic/rally-tracks/
     publishers:
       - email:
           recipients: infra-root+build@elastic.co

@@ -3,4 +3,4 @@
 jjbb-template: it.yml
 vars:
   - jobname: push
-  - branch: pytest-rally-with-makefile
+  - branch: master
