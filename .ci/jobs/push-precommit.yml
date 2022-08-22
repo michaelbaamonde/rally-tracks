@@ -3,4 +3,4 @@
 jjbb-template: precommit.yml
 vars:
   - jobname: push
-  - branch: master
+  - branch: pytest-rally-with-makefile
