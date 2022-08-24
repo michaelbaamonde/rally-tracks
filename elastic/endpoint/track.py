@@ -18,8 +18,7 @@
 from shared import parameter_sources
 from shared.runners.ilm import create_ilm
 from shared.runners.pipelines import create_pipeline
-
-from endpoint.track_processors.assets_loader import AssetsLoader
+from shared.track_processors.assets_loader import AssetsLoader
 
 
 def register(registry):
