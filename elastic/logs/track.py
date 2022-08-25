@@ -85,6 +85,10 @@ def register(registry):
 
     registry.register_param_source("track-params-source", TrackParamSource)
 
+    registry.register_param_source(
+        "add-asset-paths", parameter_sources.add_asset_paths
+    )
+
     registry.register_track_processor(TrackIdGenerator())
     registry.register_track_processor(data_generator.DataGenerator())
 

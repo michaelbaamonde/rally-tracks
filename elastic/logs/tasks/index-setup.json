@@ -3,7 +3,7 @@
   "tags": ["setup"],
   "operation": {
     "operation-type": "create-pipeline",
-    "param-source": "add-track-path"
+    "param-source": "add-asset-paths"
   }
 },
 {
@@ -11,7 +11,7 @@
   "tags": ["setup"],
   "operation": {
     "operation-type": "create-ilm",
-    "param-source": "add-track-path"
+    "param-source": "add-asset-paths"
   }
 },
 {
@@ -40,20 +40,25 @@
   }
 },
 {
-  "name": "create-all-composable-templates",
-  "tags": ["setup"],
-  "operation": {
-    "operation-type": "create-composable-template",
-    "param-source": "composable-template-source",
-    "remove-routing-shards": true,
-    "remove-pipelines": false
-  }
-},
-{
   "name": "create-required-data-streams",
   "tags": ["setup"],
   "operation": {
     "operation-type": "create-data-stream"
+  }
+},
+{
+  "name": "update-index-settings",
+  "tags": ["setup"],
+  "operation": {
+    "operation-type": "raw-request",
+     "path": "/_settings",
+     "method": "PUT",
+     "body": {
+       "index" : {
+           "number_of_replicas" : "{{number_of_replicas | default('1')}}",
+           "number_of_shards" : "{{number_of_shards | default('1')}}"
+        }
+     }
   }
 },
 {

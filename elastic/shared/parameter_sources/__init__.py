@@ -30,4 +30,5 @@ def add_asset_paths(track, params, **kwargs):
         for assets_group in track.selected_challenge_or_default.parameters.get("assets", [])
         for package in assets_group["packages"]
     ]
+    #print(f"LISTING: {[os.listdir(d) for d in params['asset-paths']]}")
     return params

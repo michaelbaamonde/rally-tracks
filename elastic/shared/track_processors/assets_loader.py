@@ -26,6 +26,7 @@ from esrally.track import (
     Index,
     IndexTemplate,
     ComponentTemplate,
+#    ComposableTemplate,
 )
 
 logger = logging.getLogger(__name__)
@@ -53,6 +54,13 @@ def load_component_template(track, asset_content):
         )
     )
 
+def load_composable_template(track, asset_content):
+    template = {
+        asset_content["name"],
+        asset_content["composable_template"],
+    }
+    track.composable_templates.append(template)
+
 
 def load_ingest_pipeline(track, asset_content):
     pass
@@ -63,6 +71,7 @@ def load_ilm_policy(track, asset_content):
 
 
 asset_loaders = {
+    "composable_templates": load_composable_template,
     "component_templates": load_component_template,
     "index_templates": load_index_template,
     "ingest_pipelines": load_ingest_pipeline,
@@ -120,6 +129,7 @@ def load_from_path(track, packages, path):
             if not path_parts[0]:
                 continue
             if path_parts[0] in asset_loaders:
+                logger.info(f"Loading [{path_parts[0]}] from [{path}]")
                 asset_loaders[path_parts[0]](track, json.loads(content))
                 count += 1
 
