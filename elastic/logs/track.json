@@ -115,7 +115,18 @@
 {
   "version": 2,
   "description": "Track for simulating logging workloads",
-  "parameters": {
+  "dependencies": [
+    "file:///home/baamonde/code/elastic/package-assets"
+  ],
+    "parameters": {
+        "assets": [
+            {
+            "repository": "file:///home/baamonde/code/elastic/package-assets/assets/production",
+            "packages": [
+                "kafka/1.2.2"
+            ]
+        }
+        ],
     "raw-data-volume-per-day": "{{ raw_data_volume_per_day | default('0.1GB') }}",
     "random-seed": {{ random_seed | default(13) | int }},
     "generator-batch-size": 10000,
