@@ -1,6 +1,6 @@
 {% import "rally.helpers" as rally with context %}
 
-{% set p_query_workflows = (query_workflows | default(["discover/search", "discover/visualize", "kafka"])) %}
+{% set p_query_workflows = (query_workflows | default(["discover/search", "discover/visualize", "kafka", "apache"])) %}
 
 {% set p_num_query_workflows = p_query_workflows | length %}
 {% set num_corpus = 18 %}
@@ -40,14 +40,22 @@
 {% set default_integration_ratios = {
     "kafka": {
       "corpora": {
-        "kafka-logs": 1.00
+        "kafka-logs": 0.50
       }
-    }
+    },
+    "apache": {
+      "corpora": {
+        "apache-access-logs": 0.25,
+        "apache-error-logs": 0.25
+      }
+    },
   }
 %}
 
 {% set default_exclude_properties = {
-    "kafka-logs": ["container"]
+    "kafka-logs": ["container"],
+    "apache-access-logs": ["container"],
+    "apache-error-logs": ["container"]
   }
 %}
 
@@ -62,7 +70,8 @@
             {
             "repository": "file:///home/baamonde/code/elastic/package-assets/assets/production",
             "packages": [
-                "kafka/0.5.0"
+                "kafka/0.5.0",
+                "apache/1.3.0"
             ]
         }
         ],
@@ -112,6 +121,31 @@
           "document-count": 312333
           }
         {% endfor %}
+      ]
+  },
+  {
+      "name": "apache-access-logs",
+      "base-url": "{{p_corpora_uri_base}}/observability/logging/apache/apache.access/raw",
+      "documents": [
+        {% for i in range([p_max_download_per_corpus_gb, 45] | min) %}
+          {% if not i == 0 %},{% endif %}
+          {
+            "target-data-stream": "logs-apache.access-default",
+            "source-file": "document-{{i}}.json.bz2",
+            "document-count": 322200
+          }
+        {% endfor %}
+      ]
+  },
+  {
+      "name": "apache-error-logs",
+      "base-url": "{{p_corpora_uri_base}}/observability/logging/apache/apache.error/raw",
+      "documents": [
+        {
+          "target-data-stream": "logs-apache.error-default",
+          "source-file": "document-0.json.bz2",
+          "document-count": 310000
+        }
       ]
     }
   ],
