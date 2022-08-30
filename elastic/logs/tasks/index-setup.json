@@ -47,7 +47,7 @@
   }
 },
 {
-  "name": "update-index-settings",
+  "name": "create-custom-index-settings",
   "tags": ["setup"],
   "operation": {
     "operation-type": "raw-request",
@@ -55,8 +55,7 @@
      "method": "PUT",
      "body": {
        "index" : {
-           "number_of_replicas" : "{{number_of_replicas | default('1')}}",
-           "number_of_shards" : "{{number_of_shards | default('1')}}"
+           "number_of_replicas" : "{{number_of_replicas | default('1')}}"
         }
      }
   }
