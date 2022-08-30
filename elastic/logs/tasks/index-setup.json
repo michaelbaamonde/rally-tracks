@@ -1,13 +1,13 @@
 {
-  "name":"insert-pipelines",
-  "tags": ["setup"],
+  "name":"insert-package-pipelines",
+  "tags": ["setup", "testing"],
   "operation": {
     "operation-type": "create-pipeline",
     "param-source": "add-asset-paths"
   }
 },
 {
-  "name": "insert-ilm",
+  "name": "insert-package-ilm-policies",
   "tags": ["setup"],
   "operation": {
     "operation-type": "create-ilm",
@@ -30,7 +30,7 @@
   "operation": "delete-component-template"
 },
 {
-  "name": "create-track-custom-component-template",
+  "name": "create-track-custom-mappings",
   "tags": ["setup"],
   "operation": {
     "operation-type": "create-component-template",
