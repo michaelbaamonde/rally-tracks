@@ -26,23 +26,24 @@ from esrally.track import (
     Index,
     IndexTemplate,
     ComponentTemplate,
-#    ComposableTemplate,
 )
 
 logger = logging.getLogger(__name__)
 
 
 def load_index_template(track, asset_content, kibana_space="default"):
-    index_name = asset_content["name"]
+    index_name = asset_content.pop("name")
+    index_template = asset_content.pop("index_template")
+    index_patterns = index_template["index_patterns"]
 
-    track.composable_templates += [
+    track.composable_templates.append(
         IndexTemplate(
             index_name,
-            index_pattern,
-            asset_content,
+            index_patterns,
+            index_template,
         )
-        for index_pattern in asset_content["index_template"]["index_patterns"]
-    ]
+    )
+
     track.data_streams.append(Index(f"{index_name}-{kibana_space}"))
 
 
@@ -55,11 +56,7 @@ def load_component_template(track, asset_content):
     )
 
 def load_composable_template(track, asset_content):
-    template = {
-        asset_content["name"],
-        asset_content["composable_template"],
-    }
-    track.composable_templates.append(template)
+    pass
 
 
 def load_ingest_pipeline(track, asset_content):

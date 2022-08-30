@@ -41,7 +41,8 @@ class ComposableTemplateParamSource(CreateComposableTemplateParamSource):
 
 def process_template(content, params):
     content = remove_pipelines(content, params.get("remove-pipelines", False))
-    return remove_routing_shards(content, params.get("remove-routing-shards", False))
+    content = remove_routing_shards(content, params.get("remove-routing-shards", False))
+    return add_track_custom_mappings(content)
 
 
 def remove_pipelines(content, remove):
@@ -69,4 +70,9 @@ def remove_routing_shards(content, remove):
     ):
         if "number_of_routing_shards" in content["template"]["settings"]["index"]:
             del content["template"]["settings"]["index"]["number_of_routing_shards"]
+    return content
+
+def add_track_custom_mappings(content):
+    if "composed_of" in content:
+        content["composed_of"].append("track-custom-mappings")
     return content

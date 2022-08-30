@@ -92,6 +92,12 @@
     "number_of_replicas" : "{{number_of_replicas | default('1')}}",
     "number_of_shards" : "{{number_of_shards | default('1')}}"
   },
+  "component-templates": [
+    {
+        "name": "track-custom-mappings",
+        "template": "./templates/component/track-custom-mappings.json"
+     }
+  ],
   "corpora": [
     {
       "name": "kafka-logs",

@@ -30,11 +30,68 @@
   "operation": "delete-component-template"
 },
 {
-  "name": "create-all-component-templates",
+  "name": "create-track-custom-component-template",
+  "tags": ["setup"],
+  "operation": {
+    "operation-type": "create-component-template",
+    "template": "track-custom-mappings",
+    "body": {
+        "template" : {
+            "settings": {
+                "index" : {
+                    "number_of_replicas" : "{{number_of_replicas | default('1')}}",
+                    "number_of_shards" : "{{number_of_shards | default('1')}}"
+                }
+            },
+            "mappings" : {
+                "runtime": {
+                    "rally.doc_size": {
+                        "type": "long"
+                    },
+                    "rally.message_size": {
+                        "type": "long"
+                    }
+                },
+                "properties" : {
+                    "event": {
+                        "properties": {
+                            "created": {
+                                "type": "date",
+                                "format": "strict_date_optional_time"
+                            },
+                            "ingested": {
+                                "type": "date",
+                                "format": "strict_date_optional_time"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "version" : 0,
+        "_meta" : {
+            "managed" : false,
+            "description" : "mappings for the custom track template installed by Rally"
+        }
+    }
+  }
+},
+{
+  "name": "create-all-package-component-templates",
   "tags": ["setup"],
   "operation": {
     "operation-type": "create-component-template",
     "param-source": "component-template-source",
+    "remove-routing-shards": true,
+    "remove-pipelines": false
+  }
+},
+{
+  "name": "create-all-composable-templates",
+  "tags": ["setup"],
+  "operation": {
+    "operation-type": "create-composable-template",
+    "param-source": "composable-template-source",
     "remove-routing-shards": true,
     "remove-pipelines": false
   }
