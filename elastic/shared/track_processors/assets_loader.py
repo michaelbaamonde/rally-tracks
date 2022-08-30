@@ -121,12 +121,12 @@ def load_from_path(track, packages, path):
         logger.info(f"Loading assets of [{package}] from [{path}]")
 
         count = 0
-        for path, content in assets.get_local_assets(package, path):
-            path_parts = os.path.split(path[len(package) + 1:])
+        for asset_path, content in assets.get_local_assets(package, path):
+            path_parts = os.path.split(asset_path[len(package) + 1 :])
             if not path_parts[0]:
                 continue
             if path_parts[0] in asset_loaders:
-                logger.info(f"Loading [{path_parts[0]}] from [{path}]")
+                logger.info(f"Loading [{asset_path}]")
                 asset_loaders[path_parts[0]](track, json.loads(content))
                 count += 1
 
