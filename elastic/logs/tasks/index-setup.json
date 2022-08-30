@@ -1,9 +1,25 @@
 {
+  "name":"insert-track-pipelines",
+  "tags": ["setup", "testing"],
+  "operation": {
+    "operation-type": "create-pipeline",
+    "param-source": "add-track-path"
+  }
+},
+{
   "name":"insert-package-pipelines",
   "tags": ["setup", "testing"],
   "operation": {
     "operation-type": "create-pipeline",
     "param-source": "add-asset-paths"
+  }
+},
+{
+  "name": "insert-track-ilm-policies",
+  "tags": ["setup"],
+  "operation": {
+    "operation-type": "create-ilm",
+    "param-source": "add-track-path"
   }
 },
 {
@@ -87,7 +103,7 @@
   }
 },
 {
-  "name": "create-all-composable-templates",
+  "name": "create-all-package-composable-templates",
   "tags": ["setup"],
   "operation": {
     "operation-type": "create-composable-template",
@@ -101,20 +117,6 @@
   "tags": ["setup"],
   "operation": {
     "operation-type": "create-data-stream"
-  }
-},
-{
-  "name": "create-custom-index-settings",
-  "tags": ["setup"],
-  "operation": {
-    "operation-type": "raw-request",
-     "path": "/_settings",
-     "method": "PUT",
-     "body": {
-       "index" : {
-           "number_of_replicas" : "{{number_of_replicas | default('1')}}"
-        }
-     }
   }
 },
 {
