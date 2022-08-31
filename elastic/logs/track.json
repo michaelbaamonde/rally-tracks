@@ -170,22 +170,22 @@
   ],
   "composable-templates": [
     {
-    "name": "auditbeat",
-    "index-pattern": "auditbeat-*",
-    "delete-matching-indices": false,
-    "template": "./templates/composable/auditbeat.json"
+      "name": "auditbeat",
+      "index-pattern": "auditbeat-*",
+      "delete-matching-indices": false,
+      "template": "./templates/composable/auditbeat.json"
     },
     {
-    "name": "auditbeat-frozen",
-    "index-pattern": "auditbeatfrozen-*",
-    "delete-matching-indices": false,
-    "template": "./templates/composable/auditbeat-frozen.json"
+      "name": "auditbeat-frozen",
+      "index-pattern": "auditbeatfrozen-*",
+      "delete-matching-indices": false,
+      "template": "./templates/composable/auditbeat-frozen.json"
     },
     {
-    "name": "auditbeat-quantitative",
-    "index-pattern": "auditbeatquantitative-*",
-    "delete-matching-indices": false,
-    "template": "./templates/composable/auditbeat-quantitative.json"
+      "name": "auditbeat-quantitative",
+      "index-pattern": "auditbeatquantitative-*",
+      "delete-matching-indices": false,
+      "template": "./templates/composable/auditbeat-quantitative.json"
     },
     {
       "name": "logs-k8-application.log",
