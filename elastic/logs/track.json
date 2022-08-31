@@ -160,43 +160,7 @@
   },
   "data-streams": [
     {
-      "name": "logs-kafka.log-default"
-    },
-    {
-      "name": "logs-nginx.access-default"
-    },
-    {
-      "name": "logs-nginx.error-default"
-    },
-    {
       "name": "logs-k8-application.log-default"
-    },
-    {
-      "name": "logs-mysql.slowlog-default"
-    },
-    {
-      "name": "logs-mysql.error-default"
-    },
-    {
-      "name": "logs-system.auth-default"
-    },
-    {
-      "name": "logs-system.syslog-default"
-    },
-    {
-      "name": "logs-postgresql.log-default"
-    },
-    {
-      "name": "logs-apache.access-default"
-    },
-    {
-      "name": "logs-apache.error-default"
-    },
-    {
-      "name": "logs-redis.log-default"
-    },
-    {
-      "name": "logs-redis.slowlog-default"
     }
   ],
   "component-templates": [
