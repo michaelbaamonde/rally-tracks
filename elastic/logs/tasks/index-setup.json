@@ -46,23 +46,7 @@
   "operation": "delete-component-template"
 },
 {
-  "name": "create-track-component-templates",
-  "tags": ["setup", "testing"],
-  "operation": {
-  "operation-type": "create-component-template",
-    "param-source": "add-track-path"
-  }
-},
-{
-  "name": "create-track-composable-templates",
-  "tags": ["setup", "testing"],
-  "operation": {
-  "operation-type": "create-composable-template",
-    "param-source": "add-track-path"
-  }
-},
-{
-  "name": "create-all-package-component-templates",
+  "name": "create-all-component-templates",
   "tags": ["setup", "testing"],
   "operation": {
     "operation-type": "create-component-template",
@@ -72,7 +56,7 @@
   }
 },
 {
-  "name": "create-all-package-composable-templates",
+  "name": "create-all-composable-templates",
   "tags": ["setup", "testing"],
   "operation": {
     "operation-type": "create-composable-template",
