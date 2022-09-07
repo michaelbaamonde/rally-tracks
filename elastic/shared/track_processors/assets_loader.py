@@ -87,28 +87,26 @@ def download_from_github(track, packages, repo_path, assets_root):
     repo = github.get_repo(repo_path)
 
     for package in packages:
-        logger.info(f"Downloading assets of [{package}] from [{repo.html_url}]")
-        entries = assets.get_remote_assets(package, repo)
-
         dest_package_path = os.path.join(assets_root, package)
-        if os.path.exists(dest_package_path):
-            shutil.rmtree(dest_package_path)
+        if not os.path.exists(dest_package_path):
+            logger.info(f"Downloading assets of [{package}] from [{repo.html_url}]")
+            entries = assets.get_remote_assets(package, repo)
+            count = 0
+            for path, content in assets.download_assets(entries):
+                asset_path = os.path.join(assets_root, path)
+                os.makedirs(os.path.dirname(asset_path), exist_ok=True)
+                with open(asset_path, "wb") as f:
+                    f.write(content)
 
-        count = 0
-        for path, content in assets.download_assets(entries):
-            asset_path = os.path.join(assets_root, path)
-            os.makedirs(os.path.dirname(asset_path), exist_ok=True)
-            with open(asset_path, "wb") as f:
-                f.write(content)
-
-            path_parts = os.path.split(path[len(package) + 1:])
-            if not path_parts[0]:
-                continue
-            if path_parts[0] in asset_loaders:
-                asset_loaders[path_parts[0]](track, json.loads(content))
-                count += 1
-
-        logger.info(f"Loaded [{count}] assets")
+                path_parts = os.path.split(path[len(package) + 1:])
+                if not path_parts[0]:
+                    continue
+                if path_parts[0] in asset_loaders:
+                    asset_loaders[path_parts[0]](track, json.loads(content))
+                    count += 1
+            logger.info(f"Loaded [{count}] assets")
+        else:
+            print(f"Assets for package [{package}] already exist at [{dest_package_path}]")
 
 
 def load_from_path(track, packages, path):
