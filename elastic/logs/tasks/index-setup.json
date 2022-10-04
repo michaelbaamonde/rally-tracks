@@ -66,6 +66,13 @@
   }
 },
 {
+  "name": "add-custom-mappings",
+  "tags": ["setup"],
+  "operation": {
+    "operation-type": "update-custom-templates"
+  }
+},
+{
   "name": "create-required-data-streams",
   "tags": ["setup"],
   "operation": {
