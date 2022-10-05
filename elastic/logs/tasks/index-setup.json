@@ -7,14 +7,6 @@
   }
 },
 {
-  "name":"insert-package-pipelines",
-  "tags": ["setup"],
-  "operation": {
-    "operation-type": "create-pipeline",
-    "param-source": "add-asset-paths"
-  }
-},
-{
   "name": "insert-track-ilm-policies",
   "tags": ["setup"],
   "operation": {
@@ -23,27 +15,9 @@
   }
 },
 {
-  "name": "insert-package-ilm-policies",
-  "tags": ["setup"],
-  "operation": {
-    "operation-type": "create-ilm",
-    "param-source": "add-asset-paths"
-  }
-},
-{
   "name": "delete-all-datastreams",
   "tags": ["setup"],
   "operation": "delete-data-stream"
-},
-{
-  "name": "delete-all-composable-templates",
-  "tags": ["setup"],
-  "operation": "delete-composable-template"
-},
-{
-  "name": "delete-all-component-templates",
-  "tags": ["setup"],
-  "operation": "delete-component-template"
 },
 {
   "name": "create-all-component-templates",
@@ -74,7 +48,7 @@
       "template" : {
         "settings": {
           "index" : {
-            "number_of_replicas" : "{{number_of_replicas | default('1')}}",
+            "number_of_replicas" : "{{number_of_replicas | default('0')}}",
             "number_of_shards" : "{{number_of_shards | default('1')}}"
           }
         },

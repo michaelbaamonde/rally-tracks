@@ -120,17 +120,7 @@
 {
   "version": 2,
   "description": "Track for simulating logging workloads",
-  "dependencies": [
-    "https://github.com/elastic/package-assets/archive/main.tar.gz"
-  ],
-    "parameters": {
-      "assets": [
-          {
-          "repository": "{{p_assets_repo}}",
-          "branch": "{{p_assets_repo_branch}}",
-          "packages": {{ p_packages | tojson }}
-        }
-      ],
+  "parameters": {
     "raw-data-volume-per-day": "{{ raw_data_volume_per_day | default('0.1GB') }}",
     "random-seed": {{ random_seed | default(13) | int }},
     "generator-batch-size": 10000,
@@ -154,7 +144,7 @@
     "force-data-generation": {{ force_data_generation | default(false) | tojson }},
     "detailed-results": {{ detailed_results | default(false) | tojson }},
     "number-of-workflows": {{ p_num_query_workflows }},
-    "number_of_replicas" : "{{number_of_replicas | default('1')}}",
+    "number_of_replicas" : "{{number_of_replicas | default('0')}}",
     "number_of_shards" : "{{number_of_shards | default('1')}}"
   },
   "data-streams": [
