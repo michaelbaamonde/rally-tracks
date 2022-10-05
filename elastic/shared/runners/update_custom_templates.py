@@ -15,55 +15,16 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import json
-import os
-from pathlib import Path
-
 async def update_custom_templates(es, params):
-    custom = {
-      "template" : {
-        "settings": {
-          "index" : {
-              "number_of_replicas" : 1,
-              "number_of_shards" : 1,
-          }
-        },
-        "mappings" : {
-            "runtime": {
-                "rally.doc_size": {
-                    "type": "long"
-                },
-                "rally.message_size": {
-                    "type": "long"
-                }
-            },
-            "properties" : {
-                "event": {
-                    "properties": {
-                        "created": {
-                            "type": "date",
-                            "format": "strict_date_optional_time"
-                        },
-                        "ingested": {
-                            "type": "date",
-                            "format": "strict_date_optional_time"
-                        }
-                    }
-                }
-            }
-        }
-      }
-    }
-
-    resp = await es.cluster.get_component_template()
+    custom = params.get("body", {})
     ops_count = 0
 
+    resp = await es.cluster.get_component_template()
     for template in resp["component_templates"]:
         name = template["name"]
         if name.endswith("@custom"):
             original = template["component_template"]
-            new = {**original, **custom}
-            await es.cluster.put_component_template(name=name, body=new)
+            await es.cluster.put_component_template(name=name, body={**original, **custom})
             ops_count += 1
 
     return {
