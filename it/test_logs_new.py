@@ -56,7 +56,7 @@ PACKAGES = [
 def start_stack():
     run_command_with_output("elastic-package stack up -d -v")
     yield
-    #run_command_with_output("elastic-package stack down -v")
+    run_command_with_output("elastic-package stack down -v")
 
 @pytest.fixture(scope="module")
 def install_packages(start_stack):
@@ -80,6 +80,7 @@ class TestLogs:
             track="elastic/logs",
             challenge="logging-indexing",
             target_hosts="localhost:9200",
+            track_params=params(),
             client_options="use_ssl:true,verify_certs:false,basic_auth_user:'elastic',basic_auth_password:'changeme'",
         )
         assert ret == 0
