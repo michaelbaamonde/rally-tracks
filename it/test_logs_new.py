@@ -15,6 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import logging
 import os
 
 import pytest
@@ -42,27 +43,36 @@ ELASTIC_PACKAGE_ENV_VARS = {
 }
 
 PACKAGES = [
-    "apache/1.3.5",
-    "kafka/1.2.2",
-    "mysql/1.2.1",
-    "nginx/1.4.1",
-    "postgresql/1.4.1",
-    "redis/1.2.0",
-    "system/1.19.3"
+    "apache",
+    "kafka",
+    "mysql",
+    "nginx",
+    "postgresql",
+    "redis",
+    "system"
 ]
 
 
 @pytest.fixture(scope="module")
 def start_stack():
+    logger = logging.getLogger(__name__)
+    logger.info("Starting stack services")
     run_command_with_output("elastic-package stack up -d -v")
+    logger.info("Stack services started")
     yield
-    run_command_with_output("elastic-package stack down -v")
+    # logger.info("Stopping stack services")
+    # run_command_with_output("elastic-package stack down -v")
+    # logger.info("Stack services stopped")
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="module", autouse=True)
 def install_packages(start_stack):
+    logger = logging.getLogger(__name__)
     for package in PACKAGES:
         root = f"/home/baamonde/code/elastic/package-storage/packages/{package}"
-        cmd = f"elastic-package install -R {root} -v"
+        latest_version = sorted(os.listdir(root))[-1]
+        package_root = f"/home/baamonde/code/elastic/package-storage/packages/{package}/{latest_version}"
+        cmd = f"elastic-package install -R {package_root} -v"
+        logger.info("Running command: [%s]", cmd)
         run_command_with_output(cmd, env={**os.environ, **ELASTIC_PACKAGE_ENV_VARS})
     yield
 
@@ -75,12 +85,107 @@ def params(updates=None):
 
 
 class TestLogs:
-    def test_logs_default(self, rally, install_packages):
+    def test_logs_default(self, rally):
         ret = rally.race(
             track="elastic/logs",
             challenge="logging-indexing",
             target_hosts="localhost:9200",
             track_params=params(),
             client_options="use_ssl:true,verify_certs:false,basic_auth_user:'elastic',basic_auth_password:'changeme'",
+        )
+        assert ret == 0
+
+    def test_logs_disk_usage(self, rally):
+        custom = {"number_of_shards": 4}
+        ret = rally.race(
+            track="elastic/logs",
+            challenge="logging-disk-usage",
+            target_hosts="localhost:9200",
+            track_params=params(updates=custom),
+        )
+        assert ret == 0
+
+    def test_logs_indexing_unthrottled(self,  rally):
+        ret = rally.race(
+            track="elastic/logs",
+            challenge="logging-indexing",
+            target_hosts="localhost:9200",
+            track_params=params()
+        )
+        assert ret == 0
+
+    def test_logs_querying(self, rally):
+        custom = {
+            "query_warmup_time_period": "1",
+            "query_time_period": "1",
+            "workflow_time_interval": "1",
+            "think_time_interval": "1",
+        }
+        ret = rally.race(
+            track="elastic/logs",
+            challenge="logging-querying",
+            target_hosts="localhost:9200",
+            track_params=params(updates=custom),
+            exclude_tasks="tag:setup",
+        )
+        assert ret == 0
+
+    def test_logs_indexing_querying_unthrottled(self, rally):
+        custom = {
+            "query_warmup_time_period": "1",
+            "query_time_period": "1",
+            "workflow_time_interval": "1",
+            "think_time_interval": "1",
+        }
+        ret = rally.race(
+            track="elastic/logs",
+            challenge="logging-indexing-querying",
+            target_hosts="localhost:9200",
+            track_params=params(updates=custom),
+            exclude_tasks="tag:setup",
+        )
+        assert ret == 0
+
+    def test_logs_indexing_throttled(self, rally):
+        custom = {"throttle_indexing": "true"}
+        ret = rally.race(
+            track="elastic/logs",
+            challenge="logging-indexing",
+            target_hosts="localhost:9200",
+            track_params=params(updates=custom),
+        )
+        assert ret == 0
+
+    def test_logs_indexing_querying_throttled(self, rally):
+        custom = {
+            "query_warmup_time_period": "1",
+            "query_time_period": "1",
+            "workflow_time_interval": "1",
+            "think_time_interval": "1",
+            "throttle_indexing": "true",
+        }
+        ret = rally.race(
+            track="elastic/logs",
+            challenge="logging-indexing-querying",
+            target_hosts="localhost:9200",
+            track_params=params(updates=custom),
+            exclude_tasks="tag:setup",
+        )
+        assert ret == 0
+
+    def test_logs_querying_with_preloaded_data(self, rally):
+        custom = {
+            "bulk_start_date": "2020-09-30T00-00-00Z",
+            "bulk_end_date": "2020-09-30T00-00-02Z",
+            "query_warmup_time_period": "1",
+            "query_time_period": "1",
+            "workflow_time_interval": "1",
+            "think_time_interval": "1",
+        }
+        ret = rally.race(
+            track="elastic/logs",
+            challenge="logging-querying",
+            target_hosts="localhost:9200",
+            track_params=params(updates=custom),
         )
         assert ret == 0
