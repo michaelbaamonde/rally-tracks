@@ -15,9 +15,11 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import os
+
 import pytest
 
-from pytest_rally.process import run_command_with_return_code
+from pytest_rally.process import run_command_with_output
 
 BASE_PARAMS = {
     "start_date": "2021-01-01T00-00-00Z",
@@ -29,6 +31,14 @@ BASE_PARAMS = {
     "force_data_generation": "true",
     "number_of_shards": "2",
     "number_of_replicas": "0",
+}
+
+ELASTIC_PACKAGE_ENV_VARS = {
+    "ELASTIC_PACKAGE_ELASTICSEARCH_HOST": "https://127.0.0.1:9200",
+    "ELASTIC_PACKAGE_ELASTICSEARCH_USERNAME": "elastic",
+    "ELASTIC_PACKAGE_ELASTICSEARCH_PASSWORD": "changeme",
+    "ELASTIC_PACKAGE_KIBANA_HOST": "https://127.0.0.1:5601",
+    "ELASTIC_PACKAGE_CA_CERT": "$HOME/.elastic-package/profiles/default/certs/ca-cert.pem"
 }
 
 PACKAGES = [
@@ -44,16 +54,16 @@ PACKAGES = [
 
 @pytest.fixture(scope="module")
 def start_stack():
-    run_command_with_return_code("elastic-package stack up -d -v")
-    run_command_with_return_code('elastic-package stack shellinit')
+    run_command_with_output("elastic-package stack up -d -v")
     yield
-    #run_command_with_return_code("elastic-package stack down -v")
+    run_command_with_output("elastic-package stack down -v")
 
 @pytest.fixture(scope="module")
 def install_packages(start_stack):
     for package in PACKAGES:
-        root = f"/home/baamonde/code/elastic/package-storage/{package}"
-        run_command_with_return_code(f"elastic-package install -R {root} -v")
+        root = f"/home/baamonde/code/elastic/package-storage/packages/{package}"
+        cmd = f"elastic-package install -R {root} -v"
+        run_command_with_output(cmd, env={**os.environ, **ELASTIC_PACKAGE_ENV_VARS})
     yield
 
 def params(updates=None):
@@ -69,9 +79,8 @@ class TestLogs:
         ret = rally.race(
             track="elastic/logs",
             challenge="logging-indexing",
-            track_params="number_of_replicas:0,wait_for_status:yellow",
+            track_params="number_of_replicas:0",
             target_hosts="localhost:9200",
             client_options="use_ssl:true,verify_certs:false,basic_auth_user:'elastic',basic_auth_password:'changeme'",
-            preserve_install=True,
         )
         assert ret == 0
