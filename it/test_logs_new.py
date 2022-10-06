@@ -38,7 +38,7 @@ ELASTIC_PACKAGE_ENV_VARS = {
     "ELASTIC_PACKAGE_ELASTICSEARCH_USERNAME": "elastic",
     "ELASTIC_PACKAGE_ELASTICSEARCH_PASSWORD": "changeme",
     "ELASTIC_PACKAGE_KIBANA_HOST": "https://127.0.0.1:5601",
-    "ELASTIC_PACKAGE_CA_CERT": "$HOME/.elastic-package/profiles/default/certs/ca-cert.pem"
+    "ELASTIC_PACKAGE_CA_CERT": f"{os.path.expanduser('~')}/.elastic-package/profiles/default/certs/ca-cert.pem"
 }
 
 PACKAGES = [
@@ -56,7 +56,7 @@ PACKAGES = [
 def start_stack():
     run_command_with_output("elastic-package stack up -d -v")
     yield
-    run_command_with_output("elastic-package stack down -v")
+    #run_command_with_output("elastic-package stack down -v")
 
 @pytest.fixture(scope="module")
 def install_packages(start_stack):
@@ -79,7 +79,6 @@ class TestLogs:
         ret = rally.race(
             track="elastic/logs",
             challenge="logging-indexing",
-            track_params="number_of_replicas:0",
             target_hosts="localhost:9200",
             client_options="use_ssl:true,verify_certs:false,basic_auth_user:'elastic',basic_auth_password:'changeme'",
         )
