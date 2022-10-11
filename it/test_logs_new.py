@@ -20,6 +20,7 @@ import os
 
 import pytest
 
+from esrally.utils import git
 from pytest_rally.process import run_command_with_output
 
 BASE_PARAMS = {
@@ -32,6 +33,11 @@ BASE_PARAMS = {
     "force_data_generation": "true",
     "number_of_shards": "2",
     "number_of_replicas": "0",
+}
+
+RALLY_CLI_OPTS = {
+    "target_hosts": "localhost:9200",
+    "client_options": "use_ssl:true,verify_certs:false,basic_auth_user:'elastic',basic_auth_password:'changeme'",
 }
 
 ELASTIC_PACKAGE_ENV_VARS = {
@@ -52,6 +58,21 @@ PACKAGES = [
     "system"
 ]
 
+RALLY_HOME = os.getenv("RALLY_HOME", os.path.expanduser("~"))
+RALLY_CONFIG_DIR = os.path.join(RALLY_HOME, ".rally")
+RALLY_PACKAGES_DIR = os.path.join(RALLY_CONFIG_DIR, "benchmarks", "package-storage")
+
+@pytest.fixture(scope="module", autouse=True)
+def clone_package_storage_repo():
+    logger = logging.getLogger(__name__)
+    if os.path.isdir(RALLY_PACKAGES_DIR):
+        logger.info(f"Directory [{RALLY_PACKAGES_DIR}] already exists. Skipping clone.")
+        logger.info(f"Checking out branch [production] in [{RALLY_PACKAGES_DIR}]")
+        git.checkout(RALLY_PACKAGES_DIR, branch="production")
+    else:
+        logger.info(f"Cloning into [{RALLY_PACKAGES_DIR}]")
+        git.clone(src=RALLY_PACKAGES_DIR, remote="https://github.com/elastic/package-storage")
+        git.checkout(RALLY_PACKAGES_DIR, branch="production")
 
 @pytest.fixture(scope="module")
 def start_stack():
@@ -60,18 +81,17 @@ def start_stack():
     run_command_with_output("elastic-package stack up -d -v")
     logger.info("Stack services started")
     yield
-    # logger.info("Stopping stack services")
-    # run_command_with_output("elastic-package stack down -v")
-    # logger.info("Stack services stopped")
+    logger.info("Stopping stack services")
+    run_command_with_output("elastic-package stack down -v")
+    logger.info("Stack services stopped")
 
 @pytest.fixture(scope="module", autouse=True)
 def install_packages(start_stack):
     logger = logging.getLogger(__name__)
     for package in PACKAGES:
-        root = f"/home/baamonde/code/elastic/package-storage/packages/{package}"
-        latest_version = sorted(os.listdir(root))[-1]
-        package_root = f"/home/baamonde/code/elastic/package-storage/packages/{package}/{latest_version}"
-        cmd = f"elastic-package install -R {package_root} -v"
+        package_root = f"{RALLY_PACKAGES_DIR}/{package}"
+        latest_version = sorted(os.listdir(package_root))[-1]
+        cmd = f"elastic-package install -R {package_root}/{latest_version} -v"
         logger.info("Running command: [%s]", cmd)
         run_command_with_output(cmd, env={**os.environ, **ELASTIC_PACKAGE_ENV_VARS})
     yield
@@ -89,9 +109,8 @@ class TestLogs:
         ret = rally.race(
             track="elastic/logs",
             challenge="logging-indexing",
-            target_hosts="localhost:9200",
             track_params=params(),
-            client_options="use_ssl:true,verify_certs:false,basic_auth_user:'elastic',basic_auth_password:'changeme'",
+            **RALLY_CLI_OPTS,
         )
         assert ret == 0
 
@@ -100,8 +119,8 @@ class TestLogs:
         ret = rally.race(
             track="elastic/logs",
             challenge="logging-disk-usage",
-            target_hosts="localhost:9200",
             track_params=params(updates=custom),
+            **RALLY_CLI_OPTS,
         )
         assert ret == 0
 
@@ -109,8 +128,8 @@ class TestLogs:
         ret = rally.race(
             track="elastic/logs",
             challenge="logging-indexing",
-            target_hosts="localhost:9200",
-            track_params=params()
+            track_params=params(),
+            **RALLY_CLI_OPTS,
         )
         assert ret == 0
 
@@ -124,9 +143,9 @@ class TestLogs:
         ret = rally.race(
             track="elastic/logs",
             challenge="logging-querying",
-            target_hosts="localhost:9200",
             track_params=params(updates=custom),
             exclude_tasks="tag:setup",
+            **RALLY_CLI_OPTS,
         )
         assert ret == 0
 
@@ -140,9 +159,9 @@ class TestLogs:
         ret = rally.race(
             track="elastic/logs",
             challenge="logging-indexing-querying",
-            target_hosts="localhost:9200",
             track_params=params(updates=custom),
             exclude_tasks="tag:setup",
+            **RALLY_CLI_OPTS,
         )
         assert ret == 0
 
@@ -151,8 +170,8 @@ class TestLogs:
         ret = rally.race(
             track="elastic/logs",
             challenge="logging-indexing",
-            target_hosts="localhost:9200",
             track_params=params(updates=custom),
+            **RALLY_CLI_OPTS,
         )
         assert ret == 0
 
@@ -167,9 +186,9 @@ class TestLogs:
         ret = rally.race(
             track="elastic/logs",
             challenge="logging-indexing-querying",
-            target_hosts="localhost:9200",
             track_params=params(updates=custom),
             exclude_tasks="tag:setup",
+            **RALLY_CLI_OPTS,
         )
         assert ret == 0
 
@@ -185,7 +204,7 @@ class TestLogs:
         ret = rally.race(
             track="elastic/logs",
             challenge="logging-querying",
-            target_hosts="localhost:9200",
             track_params=params(updates=custom),
+            **RALLY_CLI_OPTS,
         )
         assert ret == 0
