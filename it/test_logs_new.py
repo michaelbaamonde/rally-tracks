@@ -89,7 +89,7 @@ def start_stack():
 def install_packages(start_stack):
     logger = logging.getLogger(__name__)
     for package in PACKAGES:
-        package_root = f"{RALLY_PACKAGES_DIR}/{package}"
+        package_root = f"{RALLY_PACKAGES_DIR}/packages/{package}"
         latest_version = sorted(os.listdir(package_root))[-1]
         cmd = f"elastic-package install -R {package_root}/{latest_version} -v"
         logger.info("Running command: [%s]", cmd)
