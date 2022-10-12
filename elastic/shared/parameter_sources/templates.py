@@ -58,6 +58,7 @@ def remove_routing_shards(content, remove):
             del content["template"]["settings"]["index"]["number_of_routing_shards"]
     return content
 
+
 def add_track_custom_mappings(content):
     if "composed_of" in content:
         content["composed_of"].append("track-custom-mappings")

@@ -58,7 +58,6 @@ def register(registry):
     registry.register_runner("set-shards-datastream", datastream.shards, async_runner=True)
     registry.register_runner("update-custom-templates", update_custom_templates, async_runner=True)
 
-
     registry.register_param_source("processed-source", ProcessedCorpusParamSource)
 
     registry.register_runner("create-ilm", create_ilm, async_runner=True)
@@ -77,9 +76,7 @@ def register(registry):
 
     registry.register_param_source("track-params-source", TrackParamSource)
 
-    registry.register_param_source(
-        "add-asset-paths", parameter_sources.add_asset_paths
-    )
+    registry.register_param_source("add-asset-paths", parameter_sources.add_asset_paths)
 
     registry.register_track_processor(TrackIdGenerator())
     registry.register_track_processor(data_generator.DataGenerator())

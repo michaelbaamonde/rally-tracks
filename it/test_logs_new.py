@@ -19,7 +19,6 @@ import logging
 import os
 
 import pytest
-
 from esrally.utils import git
 from pytest_rally.process import run_command_with_output
 
@@ -45,22 +44,15 @@ ELASTIC_PACKAGE_ENV_VARS = {
     "ELASTIC_PACKAGE_ELASTICSEARCH_USERNAME": "elastic",
     "ELASTIC_PACKAGE_ELASTICSEARCH_PASSWORD": "changeme",
     "ELASTIC_PACKAGE_KIBANA_HOST": "https://127.0.0.1:5601",
-    "ELASTIC_PACKAGE_CA_CERT": f"{os.path.expanduser('~')}/.elastic-package/profiles/default/certs/ca-cert.pem"
+    "ELASTIC_PACKAGE_CA_CERT": f"{os.path.expanduser('~')}/.elastic-package/profiles/default/certs/ca-cert.pem",
 }
 
-PACKAGES = [
-    "apache",
-    "kafka",
-    "mysql",
-    "nginx",
-    "postgresql",
-    "redis",
-    "system"
-]
+PACKAGES = ["apache", "kafka", "mysql", "nginx", "postgresql", "redis", "system"]
 
 RALLY_HOME = os.getenv("RALLY_HOME", os.path.expanduser("~"))
 RALLY_CONFIG_DIR = os.path.join(RALLY_HOME, ".rally")
 RALLY_PACKAGES_DIR = os.path.join(RALLY_CONFIG_DIR, "benchmarks", "package-storage")
+
 
 @pytest.fixture(scope="module", autouse=True)
 def clone_package_storage_repo():
@@ -74,6 +66,7 @@ def clone_package_storage_repo():
         git.clone(src=RALLY_PACKAGES_DIR, remote="https://github.com/elastic/package-storage")
         git.checkout(RALLY_PACKAGES_DIR, branch="production")
 
+
 @pytest.fixture(scope="module")
 def start_stack():
     logger = logging.getLogger(__name__)
@@ -85,6 +78,7 @@ def start_stack():
     run_command_with_output("elastic-package stack down -v")
     logger.info("Stack services stopped")
 
+
 @pytest.fixture(scope="module", autouse=True)
 def install_packages(start_stack):
     logger = logging.getLogger(__name__)
@@ -95,6 +89,7 @@ def install_packages(start_stack):
         logger.info("Running command: [%s]", cmd)
         run_command_with_output(cmd, env={**os.environ, **ELASTIC_PACKAGE_ENV_VARS})
     yield
+
 
 def params(updates=None):
     base = BASE_PARAMS.copy()
@@ -124,7 +119,7 @@ class TestLogs:
         )
         assert ret == 0
 
-    def test_logs_indexing_unthrottled(self,  rally):
+    def test_logs_indexing_unthrottled(self, rally):
         ret = rally.race(
             track="elastic/logs",
             challenge="logging-indexing",

@@ -22,7 +22,6 @@ import shutil
 from urllib.parse import urlparse
 
 from esrally.track import ComponentTemplate, Index, IndexTemplate
-
 from esrally.utils import git
 
 RALLY_HOME = os.getenv("RALLY_HOME", os.path.expanduser("~"))
@@ -55,6 +54,7 @@ def load_component_template(track, asset_content):
             asset_content["component_template"],
         )
     )
+
 
 def load_composable_template(track, asset_content):
     pass

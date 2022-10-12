@@ -15,6 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
+
 async def update_custom_templates(es, params):
     custom = params.get("body", {})
     ops_count = 0
