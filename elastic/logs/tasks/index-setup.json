@@ -1,5 +1,5 @@
 {
-  "name":"insert-pipelines",
+  "name":"insert-track-pipelines",
   "tags": ["setup"],
   "operation": {
     "operation-type": "create-pipeline",
@@ -7,7 +7,7 @@
   }
 },
 {
-  "name": "insert-ilm",
+  "name": "insert-track-ilm-policies",
   "tags": ["setup"],
   "operation": {
     "operation-type": "create-ilm",
