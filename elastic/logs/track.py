@@ -38,7 +38,6 @@ from shared.runners.update_custom_templates import update_custom_templates
 from shared.schedulers.indexing import TimestampThrottler
 from shared.schedulers.query import WorkflowScheduler
 from shared.track_processors import data_generator
-from shared.track_processors.assets_loader import AssetsLoader
 from shared.track_processors.track_id_generator import TrackIdGenerator
 
 
