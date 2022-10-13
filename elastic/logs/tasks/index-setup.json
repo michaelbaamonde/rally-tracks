@@ -91,7 +91,7 @@
   "name": "check-cluster-health",
   "operation": {
     "operation-type": "cluster-health",
-    "index": "_all",
+    "index":"logs-apache*,logs-kafka*,logs-mysql*,logs-nginx*,logs-postgresql*,logs-redis*,logs-system*",
     "request-params": {
       "wait_for_status": "{{wait_for_status | default('green')}}",
       "wait_for_no_relocating_shards": "true"
