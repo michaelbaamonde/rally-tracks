@@ -20,16 +20,6 @@
   "operation": "delete-data-stream"
 },
 {
-  "name": "delete-all-composable-templates",
-  "tags": ["setup"],
-  "operation": "delete-composable-template"
-},
-{
-  "name": "delete-all-component-templates",
-  "tags": ["setup"],
-  "operation": "delete-component-template"
-},
-{
   "name": "create-all-component-templates",
   "tags": ["setup"],
   "operation": {
@@ -47,6 +37,47 @@
     "param-source": "composable-template-source",
     "remove-routing-shards": true,
     "remove-pipelines": false
+  }
+},
+{
+  "name": "add-custom-mappings",
+  "tags": ["setup"],
+  "operation": {
+    "operation-type": "update-custom-templates",
+    "body": {
+      "template" : {
+        "settings": {
+          "index" : {
+            "number_of_replicas" : "{{number_of_replicas | default('0')}}",
+            "number_of_shards" : "{{number_of_shards | default('1')}}"
+          }
+        },
+        "mappings" : {
+          "runtime": {
+            "rally.doc_size": {
+              "type": "long"
+            },
+            "rally.message_size": {
+              "type": "long"
+            }
+          },
+          "properties" : {
+            "event": {
+              "properties": {
+                "created": {
+                  "type": "date",
+                  "format": "strict_date_optional_time"
+                },
+                "ingested": {
+                  "type": "date",
+                  "format": "strict_date_optional_time"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 },
 {

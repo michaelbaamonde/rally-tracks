@@ -34,9 +34,11 @@ from shared.runners.ilm import create_ilm
 from shared.runners.pipelines import create_pipeline
 from shared.runners.remote_cluster import ConfigureRemoteCluster, FollowIndexRunner
 from shared.runners.slm import create_slm
+from shared.runners.update_custom_templates import update_custom_templates
 from shared.schedulers.indexing import TimestampThrottler
 from shared.schedulers.query import WorkflowScheduler
 from shared.track_processors import data_generator
+from shared.track_processors.assets_loader import AssetsLoader
 from shared.track_processors.track_id_generator import TrackIdGenerator
 
 
@@ -54,6 +56,7 @@ def register(registry):
     registry.register_runner("check-datastream", datastream.check_health, async_runner=True)
     registry.register_runner("rollover-datastream", datastream.rollover, async_runner=True)
     registry.register_runner("set-shards-datastream", datastream.shards, async_runner=True)
+    registry.register_runner("update-custom-templates", update_custom_templates, async_runner=True)
 
     registry.register_param_source("processed-source", ProcessedCorpusParamSource)
 
