@@ -20,16 +20,6 @@
   "operation": "delete-data-stream"
 },
 {
-  "name": "delete-all-composable-templates",
-  "tags": ["setup"],
-  "operation": "delete-composable-template"
-},
-{
-  "name": "delete-all-component-templates",
-  "tags": ["setup"],
-  "operation": "delete-component-template"
-},
-{
   "name": "create-all-component-templates",
   "tags": ["setup"],
   "operation": {
